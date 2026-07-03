@@ -1,12 +1,12 @@
 """The Claude tool-use loop — a Telegram message in, a Spanish reply out.
 
-This is the "agent that USES the API through surfcall" — the thesis embodied. It
+This is the "agent that USES the API through Gecko" — the thesis embodied. It
 is a manual agentic loop (per the Anthropic Messages API): send the message + the
-allow-listed surfcall tools; while the model wants a tool, execute it through the
+allow-listed Gecko tools; while the model wants a tool, execute it through the
 ``SurfcallTools`` seam and feed the result back; stop on ``end_turn``.
 
 ``llm`` is injected (the real ``anthropic.Anthropic`` client OR a fake), so the
-whole loop is testable offline with surfcall's recorded mode — no network, no
+whole loop is testable offline with Gecko's recorded mode — no network, no
 spend, no Anthropic import here. Bounded by ``max_iters`` so a misbehaving model
 can never loop forever.
 """
@@ -15,7 +15,7 @@ from __future__ import annotations
 
 from typing import Any
 
-from .surfcall_tools import SurfcallTools
+from .surfcall_tools import ToolProvider
 
 FALLBACK_ES = (
     "Disculpa, no pude completar la consulta en este momento. Intenta de nuevo "
@@ -36,7 +36,7 @@ def respond(
     user_text: str,
     *,
     llm: Any,
-    tools: SurfcallTools,
+    tools: ToolProvider,
     model: str,
     system: str,
     history: list[dict[str, Any]] | None = None,

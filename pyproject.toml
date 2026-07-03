@@ -7,8 +7,10 @@ requires-python = ">=3.11"
 license = { text = "MIT" }
 dependencies = [
     # The comprehension engine. Public, MIT. This is what makes the bot
-    # first-call-correct against the SOS Venezuela API.
-    "gecko-surf>=0.1.0",
+    # first-call-correct against the humanitarian APIs. The `events` extra adds
+    # pymongo so the bot emits control-plane-safe usage telemetry when MONGODB_URI
+    # is set (silent no-op otherwise).
+    "gecko-surf[events]>=0.2.0",
     # LLM providers (the agent loop) + Telegram transport.
     "anthropic>=0.40",
     "openai>=1.40",
