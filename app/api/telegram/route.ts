@@ -50,8 +50,10 @@ const FALLBACK = "No pude responder ahora mismo. Intenta de nuevo en un momento.
 const COMMAND_QUERIES: Record<string, string> = {
   cifras:
     "Dame las cifras agregadas: cuántas personas desaparecidas y cuántas encontradas.",
-  reportes: "Muéstrame los reportes o el feed reciente y resume lo más relevante.",
-  noticias: "Dame las novedades recientes del registro.",
+  reportes:
+    "Muéstrame los reportes recientes del mapa de peligros (edificios colapsados, " +
+    "refugios, agua, puntos de ayuda) y resume los más relevantes.",
+  noticias: "Dame las últimas noticias verificadas del terremoto.",
 };
 
 /** Resolve a /command to a static reply or an agent query. */
