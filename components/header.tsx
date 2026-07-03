@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import Link from "next/link";
 
 type Lang = "es" | "en";
 
@@ -15,7 +15,7 @@ export default function Header({ lang, onLangChange }: HeaderProps) {
       style={{ background: "rgba(11,31,58,0.93)" }}>
       <div className="mx-auto max-w-[920px] px-5 flex items-center justify-between h-[60px]">
         {/* Brand */}
-        <div className="flex items-center gap-2.5">
+        <Link href="/" className="flex items-center gap-2.5">
           <span
             className="w-3 h-3 rounded-full flex-shrink-0"
             style={{
@@ -27,10 +27,27 @@ export default function Header({ lang, onLangChange }: HeaderProps) {
           <span className="text-white font-bold tracking-tight text-[15px]">
             Ayuda Venezuela
           </span>
-        </div>
+        </Link>
 
-        {/* Language toggle */}
-        <div
+        <div className="flex items-center gap-4">
+          {/* Nav */}
+          <nav className="hidden sm:flex items-center gap-4 text-[13px] font-semibold">
+            <Link
+              href="/chat"
+              className="text-white/75 hover:text-white transition-colors"
+            >
+              Chat
+            </Link>
+            <Link
+              href="/#developers"
+              className="text-white/75 hover:text-white transition-colors"
+            >
+              {lang === "es" ? "Desarrolladores" : "Developers"}
+            </Link>
+          </nav>
+
+          {/* Language toggle */}
+          <div
           role="group"
           aria-label={lang === "es" ? "Idioma" : "Language"}
           className="inline-flex border border-white/25 rounded-full overflow-hidden"
@@ -49,6 +66,7 @@ export default function Header({ lang, onLangChange }: HeaderProps) {
               {l.toUpperCase()}
             </button>
           ))}
+          </div>
         </div>
       </div>
     </header>

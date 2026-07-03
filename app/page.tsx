@@ -9,6 +9,7 @@ import HowItWorks from "@/components/how-it-works";
 import PoweredBy from "@/components/powered-by";
 import ApiEndpoints from "@/components/api-endpoints";
 import BringYourSource from "@/components/bring-your-source";
+import DevHub from "@/components/dev-hub";
 import Footer from "@/components/footer";
 
 export default function Home() {
@@ -24,6 +25,7 @@ export default function Home() {
         <HowItWorks t={t} />
         <PoweredBy t={t} />
         <ApiEndpoints t={t} />
+        <DevHub t={t} />
         <BringYourSource t={t} />
       </main>
       <Footer t={t} />

@@ -66,6 +66,47 @@ const ES = {
   footer_disc:
     "En una emergencia inmediata, contacta siempre a los servicios locales (171).",
   footer_made: "Hecho con ♥ para Venezuela · por Gecko",
+
+  // Nav
+  nav_chat: "Chat",
+  nav_devs: "Desarrolladores",
+
+  // Chat page
+  chat_title: "Pregunta lo que necesites",
+  chat_sub:
+    "Chat con datos humanitarios reales, en vivo — personas reportadas y centros de acopio.",
+  chat_placeholder: "Escribe tu pregunta…",
+  chat_send: "Enviar",
+  chat_empty: "Escríbeme una pregunta para empezar.",
+  chat_hint_1: "¿Está reportada una persona con el nombre María?",
+  chat_hint_2: "¿Cuántas personas siguen desaparecidas?",
+  chat_hint_3: "¿Dónde hay centros de acopio?",
+  chat_disclaimer:
+    "Datos comunitarios sin verificar. En una emergencia, llama al 171.",
+  chat_error: "No pude responder ahora mismo. Intenta de nuevo en un momento.",
+
+  // Developer hub
+  dev_badge: "Para desarrolladores",
+  dev_title: "Un solo servidor. Todas las fuentes.",
+  dev_p:
+    "Centralizamos las APIs humanitarias de Venezuela y las hacemos usables por agentes de IA — sin escribir código de integración. Conéctate a nuestro MCP y tu agente ya sabe llamarlas bien a la primera. Nunca guardamos las respuestas.",
+  dev_sources_title: "Fuentes que ya puedes usar",
+  dev_src1_name: "ReportaVNZLA",
+  dev_src1_desc:
+    "~61.000 personas reportadas (desaparecidas / encontradas) y centros de acopio, con coordenadas. Abierta, sin token.",
+  dev_src2_name: "SOS Venezuela 2026",
+  dev_src2_desc:
+    "Reportes del mapa de peligros, cifras, daños estructurales y noticias verificadas. Abierta, sin token.",
+  dev_src_more:
+    "¿Tienes otra fuente humanitaria? La añadimos: envía su spec y aparece en el servidor para todos.",
+  dev_mcp_title: "1 · Conecta nuestro MCP",
+  dev_mcp_p:
+    "Añádelo a Claude Code o Cursor. Tu agente descubre las herramientas y llama a la API real.",
+  dev_install_title: "2 · O corre Gecko tú mismo",
+  dev_install_p:
+    "Comprende cualquier OpenAPI en herramientas listas para agentes, en local y gratis.",
+  dev_cta_repo: "Ver Gecko en GitHub →",
+  dev_cta_chat: "Probar el chat",
 };
 
 const EN: typeof ES = {
@@ -133,6 +174,47 @@ const EN: typeof ES = {
   footer_contact: "Contact",
   footer_disc: "In an immediate emergency, always contact your local services (171).",
   footer_made: "Made with ♥ for Venezuela · by Gecko",
+
+  // Nav
+  nav_chat: "Chat",
+  nav_devs: "Developers",
+
+  // Chat page
+  chat_title: "Ask what you need",
+  chat_sub:
+    "Chat with real, live humanitarian data — reported people and collection centers.",
+  chat_placeholder: "Type your question…",
+  chat_send: "Send",
+  chat_empty: "Send me a question to get started.",
+  chat_hint_1: "Is there anyone reported with the name María?",
+  chat_hint_2: "How many people are still missing?",
+  chat_hint_3: "Where are the collection centers?",
+  chat_disclaimer:
+    "Unverified community data. In an emergency, call 171.",
+  chat_error: "I couldn't answer right now. Please try again in a moment.",
+
+  // Developer hub
+  dev_badge: "For developers",
+  dev_title: "One server. Every source.",
+  dev_p:
+    "We centralize Venezuela's humanitarian APIs and make them usable by AI agents — with no integration code. Connect to our MCP and your agent already knows how to call them right the first time. We never store the responses.",
+  dev_sources_title: "Sources you can use today",
+  dev_src1_name: "ReportaVNZLA",
+  dev_src1_desc:
+    "~61,000 reported people (missing / found) and collection centers, with coordinates. Open, no token.",
+  dev_src2_name: "SOS Venezuela 2026",
+  dev_src2_desc:
+    "Hazard-map reports, aggregate counts, structural damage and verified news. Open, no token.",
+  dev_src_more:
+    "Have another humanitarian source? We add it: send its spec and it shows up on the server for everyone.",
+  dev_mcp_title: "1 · Connect our MCP",
+  dev_mcp_p:
+    "Add it to Claude Code or Cursor. Your agent discovers the tools and calls the real API.",
+  dev_install_title: "2 · Or run Gecko yourself",
+  dev_install_p:
+    "Comprehend any OpenAPI into agent-ready tools, locally and for free.",
+  dev_cta_repo: "See Gecko on GitHub →",
+  dev_cta_chat: "Try the chat",
 };
 
 export const translations: Record<Lang, typeof ES> = { es: ES, en: EN };
