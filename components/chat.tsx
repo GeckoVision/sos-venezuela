@@ -1,46 +1,63 @@
 "use client";
 
+import { useChat } from "@ai-sdk/react";
 import { useEffect, useRef, useState } from "react";
 
 interface ChatProps {
   t: Record<string, string>;
 }
 
-type Msg = { role: "user" | "assistant"; content: string };
+type StagedImage = { mediaType: string; url: string; name: string };
+
+function fileToDataUrl(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const r = new FileReader();
+    r.onload = () => resolve(r.result as string);
+    r.onerror = () => reject(r.error);
+    r.readAsDataURL(file);
+  });
+}
 
 export default function Chat({ t }: ChatProps) {
-  const [msgs, setMsgs] = useState<Msg[]>([]);
+  const { messages, sendMessage, status } = useChat();
   const [input, setInput] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [image, setImage] = useState<StagedImage | null>(null);
   const endRef = useRef<HTMLDivElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
+  const busy = status === "submitted" || status === "streaming";
 
   useEffect(() => {
     endRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [msgs, busy]);
+  }, [messages, busy]);
 
-  async function ask(text: string) {
+  function submit(text: string) {
     const q = text.trim();
-    if (!q || busy) return;
-    const history = msgs.slice(-8);
-    setMsgs((m) => [...m, { role: "user", content: q }]);
-    setInput("");
-    setBusy(true);
-    try {
-      const r = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ message: q, history }),
+    if ((!q && !image) || busy) return;
+    if (image) {
+      sendMessage({
+        role: "user",
+        parts: [
+          { type: "file", mediaType: image.mediaType, url: image.url },
+          { type: "text", text: q || t.chat_photo_default },
+        ],
       });
-      const data = (await r.json()) as { reply?: string };
-      setMsgs((m) => [
-        ...m,
-        { role: "assistant", content: data.reply || t.chat_error },
-      ]);
-    } catch {
-      setMsgs((m) => [...m, { role: "assistant", content: t.chat_error }]);
-    } finally {
-      setBusy(false);
+    } else {
+      sendMessage({ text: q });
     }
+    setInput("");
+    setImage(null);
+  }
+
+  async function onPickImage(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // allow re-picking the same file
+    if (!file) return;
+    if (!file.type.startsWith("image/")) return;
+    setImage({
+      mediaType: file.type,
+      url: await fileToDataUrl(file),
+      name: file.name,
+    });
   }
 
   const hints = [t.chat_hint_1, t.chat_hint_2, t.chat_hint_3];
@@ -55,16 +72,15 @@ export default function Chat({ t }: ChatProps) {
       </div>
 
       <div className="rounded-2xl border border-line bg-card shadow-sm overflow-hidden flex flex-col h-[62vh] min-h-[420px]">
-        {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-3">
-          {msgs.length === 0 && (
+          {messages.length === 0 && (
             <div className="h-full flex flex-col items-center justify-center gap-4 text-center">
               <p className="text-muted text-[15px]">{t.chat_empty}</p>
               <div className="flex flex-col gap-2 w-full max-w-[420px]">
                 {hints.map((h) => (
                   <button
                     key={h}
-                    onClick={() => ask(h)}
+                    onClick={() => submit(h)}
                     className="text-left text-[14px] text-navy bg-surface hover:bg-line rounded-xl px-4 py-2.5 transition-colors cursor-pointer"
                   >
                     {h}
@@ -74,9 +90,9 @@ export default function Chat({ t }: ChatProps) {
             </div>
           )}
 
-          {msgs.map((m, i) => (
+          {messages.map((m) => (
             <div
-              key={i}
+              key={m.id}
               className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}
             >
               <div
@@ -86,12 +102,26 @@ export default function Chat({ t }: ChatProps) {
                     : "bg-surface text-ink rounded-bl-sm"
                 }`}
               >
-                {m.content}
+                {m.parts.map((part, i) => {
+                  if (part.type === "text")
+                    return <span key={i}>{part.text}</span>;
+                  if (part.type === "file" && part.mediaType?.startsWith("image/"))
+                    return (
+                      // eslint-disable-next-line @next/next/no-img-element
+                      <img
+                        key={i}
+                        src={part.url}
+                        alt={t.chat_photo_alt}
+                        className="max-w-[220px] rounded-lg mt-1"
+                      />
+                    );
+                  return null;
+                })}
               </div>
             </div>
           ))}
 
-          {busy && (
+          {status === "submitted" && (
             <div className="flex justify-start">
               <div className="bg-surface text-muted rounded-2xl rounded-bl-sm px-4 py-2.5 text-[15px]">
                 <span className="inline-flex gap-1">
@@ -105,14 +135,51 @@ export default function Chat({ t }: ChatProps) {
           <div ref={endRef} />
         </div>
 
-        {/* Composer */}
+        {/* Staged image chip */}
+        {image && (
+          <div className="border-t border-line px-3 pt-2 flex items-center gap-2">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={image.url}
+              alt={t.chat_photo_alt}
+              className="w-10 h-10 rounded object-cover"
+            />
+            <span className="text-[13px] text-muted flex-1 truncate">
+              {image.name}
+            </span>
+            <button
+              onClick={() => setImage(null)}
+              className="text-muted hover:text-red text-[13px] font-semibold cursor-pointer"
+              aria-label={t.chat_remove_photo}
+            >
+              ✕
+            </button>
+          </div>
+        )}
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            ask(input);
+            submit(input);
           }}
           className="border-t border-line p-3 flex gap-2"
         >
+          <input
+            ref={fileRef}
+            type="file"
+            accept="image/*"
+            onChange={onPickImage}
+            className="hidden"
+          />
+          <button
+            type="button"
+            onClick={() => fileRef.current?.click()}
+            className="rounded-xl border border-line px-3 text-[18px] text-muted hover:text-navy hover:border-navy/30 transition-colors cursor-pointer"
+            aria-label={t.chat_attach_photo}
+            title={t.chat_attach_photo}
+          >
+            📎
+          </button>
           <input
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -123,7 +190,7 @@ export default function Chat({ t }: ChatProps) {
           />
           <button
             type="submit"
-            disabled={busy || !input.trim()}
+            disabled={busy || (!input.trim() && !image)}
             className="rounded-xl bg-blue text-white font-bold px-5 py-2.5 text-[15px] transition-colors hover:bg-blue-hover disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
           >
             {t.chat_send}

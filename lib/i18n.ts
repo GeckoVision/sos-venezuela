@@ -84,6 +84,10 @@ const ES = {
   chat_disclaimer:
     "Datos comunitarios sin verificar. En una emergencia, llama al 171.",
   chat_error: "No pude responder ahora mismo. Intenta de nuevo en un momento.",
+  chat_attach_photo: "Adjuntar una foto",
+  chat_remove_photo: "Quitar foto",
+  chat_photo_default: "¿Está reportada esta persona? Descríbela y búscala.",
+  chat_photo_alt: "foto",
 
   // Developer hub
   dev_badge: "Para desarrolladores",
@@ -192,6 +196,10 @@ const EN: typeof ES = {
   chat_disclaimer:
     "Unverified community data. In an emergency, call 171.",
   chat_error: "I couldn't answer right now. Please try again in a moment.",
+  chat_attach_photo: "Attach a photo",
+  chat_remove_photo: "Remove photo",
+  chat_photo_default: "Is this person reported? Describe and search for them.",
+  chat_photo_alt: "photo",
 
   // Developer hub
   dev_badge: "For developers",

@@ -32,8 +32,8 @@ export default function DevHub({ t }: DevHubProps) {
         </h3>
         <div className="grid sm:grid-cols-2 gap-3 mb-4">
           {[
-            { n: t.dev_src1_name, d: t.dev_src1_desc },
-            { n: t.dev_src2_name, d: t.dev_src2_desc },
+            { n: t.dev_src1_name, d: t.dev_src1_desc, u: "https://reportavnzla.com" },
+            { n: t.dev_src2_name, d: t.dev_src2_desc, u: "https://sosvenezuela2026.com" },
           ].map((s) => (
             <div
               key={s.n}
@@ -41,6 +41,14 @@ export default function DevHub({ t }: DevHubProps) {
             >
               <div className="font-bold text-white mb-1">{s.n}</div>
               <p className="text-[14px] text-subtle leading-relaxed">{s.d}</p>
+              <a
+                href={s.u}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block mt-2 text-[13px] font-semibold text-tg hover:underline break-all"
+              >
+                {s.u.replace("https://", "")} ↗
+              </a>
             </div>
           ))}
         </div>
